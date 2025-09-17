@@ -10,12 +10,12 @@ import { NextRequest } from "next/server";
 //    the empty adapter since we're only using one agent.
 const serviceAdapter = new ExperimentalEmptyAdapter();
  
-// 2. Create the CopilotRuntime instance and utilize the PydanticAI AG-UI
+// 2. Create the CopilotRuntime instance and utilize the ADK integration
 //    integration to setup the connection.
 const runtime = new CopilotRuntime({
   agents: {
     // Our FastAPI endpoint URL
-    "my_agent": new HttpAgent({url: "http://localhost:8000/"}),
+    "my_agent": new HttpAgent({url: process.env.AGENT_URL || "http://localhost:8000/"}),
   }   
 });
  
