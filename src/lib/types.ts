@@ -64,7 +64,7 @@ export const initialState: AgentState = {
     {
       id: "2",
       title: "Best selling product",
-      value: "Smartphone",
+      value: "Laptop",
       hint: "Total sales for the last 30 days",
       icon: "conversion"
     }
