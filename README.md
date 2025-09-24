@@ -1,12 +1,9 @@
-# 📊 CopilotKit × ADK Canvas
+# CopilotKit + ADK Generative Canvas
 
-<div align="center">
-  
-  [![Watch the video](https://img.youtube.com/vi/Yau4IVLxXKg/0.jpg)](https://youtu.be/Yau4IVLxXKg)
-  
-  Watch the walkthrough video, click the image ⬆️
-  
-</div>
+
+https://github.com/user-attachments/assets/9201d528-573f-43cc-9d31-571c362318a7
+
+
 
 ---
 
