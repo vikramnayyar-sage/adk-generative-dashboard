@@ -1,6 +1,6 @@
 # 📊 CopilotKit × ADK Canvas
 
-This project provides a **Canvas UI** for building and running agents with [Google’s ADK](https://google.github.io/adk-docs/), [AG-UI](https://docs.ag-ui.com/introduction), and [CopilotKit](https://copilotkit.ai).  
+This project provides a **Canvas UI** for building and running agents with [Google’s ADK](https://google.github.io/adk-docs/), [AG-UI](https://docs.ag-ui.com/introduction), and [CopilotKit](https://github.com/CopilotKit/CopilotKit).  
 
 Instead of plain text, the agent can **populate metrics, charts, and real-time data** into the Canvas dashboard.
 
@@ -57,8 +57,8 @@ pnpm run dev
 
 ### 📚 Docs
 - [ADK](https://google.github.io/adk-docs/)  
-- [CopilotKit](https://copilotkit.ai)  
-- [Next.js](https://nextjs.org)  
+- [CopilotKit](https://github.com/CopilotKit/CopilotKit)  
+- [AG-UI](https://docs.ag-ui.com/introduction)  
 
 ---
 
