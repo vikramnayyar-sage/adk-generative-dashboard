@@ -33,11 +33,11 @@ export function SidebarInput({ inProgress, onSend, onStop, hideStopButton }: Cpk
             }}
           />
           {inProgress && !hideStopButton ? (
-            <Button size="icon" variant="suggestion" onClick={onStop} title="Stop generating">
-              <Square className="size-3" />
+            <Button size="icon" variant="ghost" onClick={onStop} title="Stop generating" className="text-accent hover:text-white">
+              <Square className="size-3 animate-pulse" />
             </Button>
           ) : (
-            <Button size="icon" variant="suggestion" disabled={!canSend} onClick={submit} title="Send">
+            <Button size="icon" variant="ghost" disabled={!canSend} onClick={submit} title="Send" >
               <ArrowUp className="size-4" />
             </Button>
           )}

@@ -40,7 +40,7 @@ export const ChartCard = ({ spec, onHumanInput, status, chartData, actionButtonT
       {status !== "complete" && onHumanInput && (
         <div className="flex justify-end gap-2 py-4">
           <Button variant="outline" onClick={() => onHumanInput(false)}>Cancel</Button>
-          <Button onClick={() => onHumanInput(true)}>{actionButtonText}</Button>
+          <Button className="bg-accent/10 border border-accent/40 text-black hover:bg-accent/20" onClick={() => onHumanInput(true)}>{actionButtonText}</Button>
         </div>
       )}
     </>

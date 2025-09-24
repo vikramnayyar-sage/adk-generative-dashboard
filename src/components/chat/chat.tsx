@@ -17,8 +17,7 @@ export function Chat({className}: ChatProps) {
         <CopilotChat
           className="flex-1 min-h-0"
           labels={{
-            title: "",
-            initial: "👋 Hi! Describe a dashboard and I'll build it."
+            initial: "👋 Hi! \n\nI'm here to help you build beautiful dashboards with data from Google Search.\n\nTry some of the suggestions below or ask me to build anything!"
           }}
           suggestions={[
             { title: "Pizza sales", message: "Please rebuild the dashboard to help me keep track of the current trends in the Pizza industry." },

@@ -1,5 +1,5 @@
 import { useCoAgent } from "@copilotkit/react-core";
-import { AgentState, initialState } from "@/lib/types";
+import { AgentState } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { PinnedMetrics } from "@/components/dashboard/layout/metrics";
 import { Charts } from "@/components/dashboard/layout/charts";
@@ -11,7 +11,6 @@ import {
 export function MainLayout({ className }: { className?: string }) {
   const { state, setState } = useCoAgent<AgentState>({
     name: "my_agent",
-    initialState: initialState
   })
 
   // Setup tool rendering and front-end tools
