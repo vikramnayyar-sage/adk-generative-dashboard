@@ -21,6 +21,14 @@ export function CashflowSummary({ state, setState }: CashflowSummaryProps) {
   const cashflowEntries: { amount: number; type: "in" | "out" }[] = state?.cashflowEntries || [];
   const creditors = state?.creditors || [];
   const debitors = state?.debitors || [];
+
+  // Keep a combined customers array in AgentState for agent compatibility
+  React.useEffect(() => {
+    const combined = [...creditors, ...debitors];
+    if (JSON.stringify(state?.customers) !== JSON.stringify(combined)) {
+      setState(prev => ({ ...prev!, customers: combined }));
+    }
+  }, [creditors, debitors]);
   // Customer CRUD handlers
   const handleAddCustomer = () => {
     const nextId = Math.max(0,

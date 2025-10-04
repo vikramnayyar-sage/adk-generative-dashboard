@@ -43,6 +43,7 @@ export interface AgentState {
   startingBalance: number;
   creditors: Customer[];
   debitors: Customer[];
+  customers?: Customer[];
   totalInflow?: number;
   totalOutflow?: number;
   netCashflow?: number;
@@ -95,5 +96,6 @@ export const initialState: AgentState = {
   cashflowEntries: [],
   startingBalance: 0,
   creditors: [],
-  debitors: []
+  debitors: [],
+  customers: []
 };

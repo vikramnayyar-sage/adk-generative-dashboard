@@ -12,8 +12,12 @@ def instruction_provider(context: ReadonlyContext) -> str:
     The current date is {datetime.now().strftime("%Y-%m-%d")}.
 
     **Key Guidelines:**
-    - Your primary source of truth is the `context.state` and information retrieved via the `SearchAgent`. Do not infer data from message history.
-    - When asked to build or edit the dashboard, always use the `SearchAgent` to gather necessary data.
+    - Your primary source of truth is the `context.state`. Do not infer data from message history.
+    - Do NOT use the `SearchAgent` for the following keys unless the user explicitly requests external or internet data:
+        - cashflow
+        - customers
+        - starting balance
+    - For these keys, always use the local dashboard state. Only trigger internet search if the user asks for information not present in the dashboard.
     - For new dashboards or "rebuild" requests, ensure all old data is cleared before populating with new information.
     - Always provide responses grounded in real data. Only generate speculative content if explicitly instructed by the user.
 
