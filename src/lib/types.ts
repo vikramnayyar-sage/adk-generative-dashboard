@@ -15,6 +15,14 @@ export type Metric = {
   icon?: "users" | "mrr" | "conversion" | "churn" | "custom";
 };
 
+export type CashflowEntry = {
+  id: number;
+  name: string;
+  amount: number;
+  dateDue: string;
+  type: "in" | "out";
+};
+
 export type Chart = ChartSpec & {
   data: ChartDataRecord[];
 }
@@ -23,6 +31,7 @@ export type AgentState = {
   title: string; 
   charts: Chart[];
   pinnedMetrics: Metric[];
+  cashflowEntries: CashflowEntry[];
 };
 
 export type AgentSetState<T extends AgentState> = (newState: T | ((prevState: T | undefined) => T)) => void
@@ -68,5 +77,6 @@ export const initialState: AgentState = {
       hint: "Total sales for the last 30 days",
       icon: "conversion"
     }
-  ]
+  ],
+  cashflowEntries: []
 };

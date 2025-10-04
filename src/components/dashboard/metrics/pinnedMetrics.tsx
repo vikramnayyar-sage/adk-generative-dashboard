@@ -44,10 +44,11 @@ export const PinnedMetricCard = ({ pinnedMetric, setState, onHumanInput, status 
             </button>
             <button
               className="text-muted-foreground hover:text-foreground"
-              onClick={() => setState((state) => ({ 
+              onClick={() => setState((state) => ({
                 title: state?.title ?? "Dashboard",
                 charts: state?.charts ?? [],
-                pinnedMetrics: (state?.pinnedMetrics ?? []).filter((x: Metric) => x.id !== pinnedMetric.id) 
+                pinnedMetrics: (state?.pinnedMetrics ?? []).filter((x: Metric) => x.id !== pinnedMetric.id),
+                cashflowEntries: state?.cashflowEntries ?? []
               }))}
               title="Remove metric"
             >
@@ -75,6 +76,7 @@ export const PinnedMetricCard = ({ pinnedMetric, setState, onHumanInput, status 
               title: state?.title ?? "Dashboard",
               charts: state?.charts ?? [],
               pinnedMetrics: (state?.pinnedMetrics ?? []).map((m: Metric) => m.id === next.id ? next : m),
+              cashflowEntries: state?.cashflowEntries ?? []
             }));
             setIsEditing(false);
           }}
