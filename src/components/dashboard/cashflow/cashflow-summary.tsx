@@ -108,15 +108,21 @@ export function CashflowSummary({ state, setState }: CashflowSummaryProps) {
 
   const netCashflow = totalInflow - totalOutflow;
 
-  // Update AgentState with summary fields for agent access
+  // Update AgentState with summary fields for agent access (only if changed)
   React.useEffect(() => {
-    setState(prev => ({
-      ...prev!,
-      totalInflow,
-      totalOutflow,
-      netCashflow
-    }));
-  }, [totalInflow, totalOutflow, netCashflow, setState]);
+    if (
+      state?.totalInflow !== totalInflow ||
+      state?.totalOutflow !== totalOutflow ||
+      state?.netCashflow !== netCashflow
+    ) {
+      setState(prev => ({
+        ...prev!,
+        totalInflow,
+        totalOutflow,
+        netCashflow
+      }));
+    }
+  }, [totalInflow, totalOutflow, netCashflow]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
