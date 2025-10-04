@@ -18,6 +18,7 @@ def instruction_provider(context: ReadonlyContext) -> str:
         - customers
         - starting balance
     - For these keys, always use the local dashboard state. Only trigger internet search if the user asks for information not present in the dashboard.
+    - For any cashflow calculation, always factor in the starting balance from the dashboard state.
     - For new dashboards or "rebuild" requests, ensure all old data is cleared before populating with new information.
     - Always provide responses grounded in real data. Only generate speculative content if explicitly instructed by the user.
 
