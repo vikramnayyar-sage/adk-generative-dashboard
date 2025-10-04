@@ -15,27 +15,31 @@ interface CashflowModalProps {
 export function CashflowModal({ state, setState }: CashflowModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const cashflowEntries = state?.cashflowEntries || [];
+  const customers = [...(state?.creditors || []), ...(state?.debitors || [])];
 
   const handleAddEntry = (newEntry: Omit<CashflowEntry, "id">) => {
     const nextId = Math.max(0, ...cashflowEntries.map(e => e.id)) + 1;
     const entryWithId: CashflowEntry = { ...newEntry, id: nextId };
-    
     setState(prevState => ({
-      ...prevState,
       title: prevState?.title || "Dashboard",
       charts: prevState?.charts || [],
       pinnedMetrics: prevState?.pinnedMetrics || [],
-      cashflowEntries: [...cashflowEntries, entryWithId]
+      cashflowEntries: [...cashflowEntries, entryWithId],
+      startingBalance: prevState?.startingBalance ?? 0,
+      creditors: prevState?.creditors ?? [],
+      debitors: prevState?.debitors ?? []
     }));
   };
 
   const handleRemoveEntry = (id: number) => {
     setState(prevState => ({
-      ...prevState,
       title: prevState?.title || "Dashboard",
       charts: prevState?.charts || [],
       pinnedMetrics: prevState?.pinnedMetrics || [],
-      cashflowEntries: cashflowEntries.filter(entry => entry.id !== id)
+      cashflowEntries: cashflowEntries.filter(entry => entry.id !== id),
+      startingBalance: prevState?.startingBalance ?? 0,
+      creditors: prevState?.creditors ?? [],
+      debitors: prevState?.debitors ?? []
     }));
   };
 
@@ -83,6 +87,7 @@ export function CashflowModal({ state, setState }: CashflowModalProps) {
             onAddEntry={handleAddEntry}
             onRemoveEntry={handleRemoveEntry}
             isModal={true}
+            customers={customers}
           />
         </div>
       </DialogContent>

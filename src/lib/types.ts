@@ -1,3 +1,10 @@
+export type Customer = {
+  id: number;
+  businessName: string;
+  phoneNumber?: string;
+  emailAddress?: string;
+  links?: string;
+};
 export type LineChartSpec = { type: "line"; title: string; x: string; y: string };
 export type BarChartSpec = { type: "bar"; title: string; x: string; y: string };
 export type PieChartSpec = { type: "pie"; title: string; x: string; y: string };
@@ -21,19 +28,25 @@ export type CashflowEntry = {
   amount: number;
   dateDue: string;
   type: "in" | "out";
+  customerId?: number;
 };
 
 export type Chart = ChartSpec & {
   data: ChartDataRecord[];
 }
 
-export type AgentState = {
-  title: string; 
+export interface AgentState {
+  title: string;
   charts: Chart[];
   pinnedMetrics: Metric[];
   cashflowEntries: CashflowEntry[];
   startingBalance: number;
-};
+  creditors: Customer[];
+  debitors: Customer[];
+  totalInflow?: number;
+  totalOutflow?: number;
+  netCashflow?: number;
+}
 
 export type AgentSetState<T extends AgentState> = (newState: T | ((prevState: T | undefined) => T)) => void
 
@@ -80,5 +93,7 @@ export const initialState: AgentState = {
     }
   ],
   cashflowEntries: [],
-  startingBalance: 0
+  startingBalance: 0,
+  creditors: [],
+  debitors: []
 };
