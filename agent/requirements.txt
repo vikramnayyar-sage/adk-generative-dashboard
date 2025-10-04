@@ -7,3 +7,4 @@ google-genai
 ag-ui-adk
 tavily-python
 fastmcp
+mcp
