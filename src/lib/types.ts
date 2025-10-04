@@ -32,6 +32,7 @@ export type AgentState = {
   charts: Chart[];
   pinnedMetrics: Metric[];
   cashflowEntries: CashflowEntry[];
+  startingBalance: number;
 };
 
 export type AgentSetState<T extends AgentState> = (newState: T | ((prevState: T | undefined) => T)) => void
@@ -78,5 +79,6 @@ export const initialState: AgentState = {
       icon: "conversion"
     }
   ],
-  cashflowEntries: []
+  cashflowEntries: [],
+  startingBalance: 0
 };

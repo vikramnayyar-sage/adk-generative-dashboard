@@ -1,8 +1,11 @@
+
 "use client";
+import React from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CashflowModal } from "./cashflow-modal";
+import { CashflowBalanceModal } from "./cashflow-balance-modal";
 import { AgentState, AgentSetState } from "@/lib/types";
 
 interface CashflowSummaryProps {
@@ -11,17 +14,18 @@ interface CashflowSummaryProps {
 }
 
 export function CashflowSummary({ state, setState }: CashflowSummaryProps) {
-  const cashflowEntries = state?.cashflowEntries || [];
+  const [isBalanceModalOpen, setIsBalanceModalOpen] = React.useState(false);
+  const cashflowEntries: { amount: number; type: "in" | "out" }[] = state?.cashflowEntries || [];
 
   // Calculate summary
   const totalInflow = cashflowEntries
-    .filter(entry => entry.type === "in")
-    .reduce((sum, entry) => sum + entry.amount, 0);
-    
+    .filter((entry: { amount: number; type: "in" | "out" }) => entry.type === "in")
+    .reduce((sum: number, entry: { amount: number; type: "in" | "out" }) => sum + entry.amount, 0);
+
   const totalOutflow = cashflowEntries
-    .filter(entry => entry.type === "out")
-    .reduce((sum, entry) => sum + Math.abs(entry.amount), 0);
-    
+    .filter((entry: { amount: number; type: "in" | "out" }) => entry.type === "out")
+    .reduce((sum: number, entry: { amount: number; type: "in" | "out" }) => sum + Math.abs(entry.amount), 0);
+
   const netCashflow = totalInflow - totalOutflow;
 
   const formatCurrency = (amount: number) => {
@@ -51,7 +55,21 @@ export function CashflowSummary({ state, setState }: CashflowSummaryProps) {
               </Badge>
             </div>
           </div>
-          <CashflowModal state={state} setState={setState} />
+          <div className="flex items-center gap-2">
+            <CashflowModal state={state} setState={setState} />
+            <button
+              className="bg-blue-100 text-blue-800 rounded px-2 py-1 font-semibold text-sm border-none cursor-pointer"
+              onClick={() => setIsBalanceModalOpen(true)}
+            >
+              Set Starting Balance (${state?.startingBalance ?? 0})
+            </button>
+            <CashflowBalanceModal
+              isOpen={isBalanceModalOpen}
+              setIsOpen={setIsBalanceModalOpen}
+              state={state}
+              setState={setState}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
