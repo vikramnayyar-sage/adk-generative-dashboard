@@ -8,3 +8,4 @@ ag-ui-adk
 tavily-python
 fastmcp
 mcp
+mailtrap
