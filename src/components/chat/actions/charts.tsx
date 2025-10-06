@@ -1,5 +1,23 @@
 import { useCopilotAction } from "@copilotkit/react-core";
-import type { AgentState, ChartSpec, LineChartSpec, BarChartSpec, PieChartSpec, Chart, ChartDataRecord, AgentSetState } from "@/lib/types";
+import type { AgentState, ChartSpec, Chart, ChartDataRecord, AgentSetState } from "@/lib/types";
+
+type TreemapNode = { label: string; value: number; children?: TreemapNode[] };
+
+type ChartActionArgs = {
+  type?: string;
+  title?: string;
+  x?: string;
+  y?: string;
+  data?: ChartDataRecord[];
+  columns?: string[];
+  value?: number;
+  matrix?: number[][];
+  xLabels?: string[];
+  yLabels?: string[];
+  groups?: string[];
+  nodes?: TreemapNode[];
+  currentTitle?: string;
+};
 import { ChartCard } from "@/components/dashboard/charts";
 import { Button } from "@/components/ui/button";
 
@@ -19,51 +37,73 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       { name: "x", type: "string", required: false },
       { name: "y", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
+      { name: "columns", type: "string[]", required: false },
+      { name: "value", type: "number", required: false },
+  { name: "matrix", type: "object[]", required: false },
+      { name: "xLabels", type: "string[]", required: false },
+      { name: "yLabels", type: "string[]", required: false },
+      { name: "groups", type: "string[]", required: false },
+      { name: "nodes", type: "object[]", required: false }
     ],
     renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { type, title, x, y, data } = args as {
-        type: string;
-        title: string;
-        x?: string;
-        y?: string;
-        data?: ChartDataRecord[];
-      };
-
+      const {
+        type = "line",
+        title = "Untitled",
+        x,
+        y,
+        data,
+        columns,
+        value,
+        matrix,
+        xLabels,
+        yLabels,
+        groups,
+        nodes
+      } = args as ChartActionArgs;
       let spec: ChartSpec | null = null;
+      let chartData: ChartDataRecord[] = Array.isArray(data) ? data : [];
       if (type === "line") {
-        spec = { type: "line", title, x: x ?? "x", y: y ?? "y" } as LineChartSpec;
+        spec = { type: "line", title, x: x ?? "x", y: y ?? "y" };
       } else if (type === "bar") {
-        spec = { type: "bar", title, x: x ?? "x", y: y ?? "y" } as BarChartSpec;
+        spec = { type: "bar", title, x: x ?? "x", y: y ?? "y" };
       } else if (type === "pie") {
-        spec = { type: "pie", title, x: x ?? "category", y: y ?? "value" } as PieChartSpec;
+        spec = { type: "pie", title, x: x ?? "category", y: y ?? "value" };
+      } else if (type === "table") {
+        spec = { type: "table", title, columns: columns ?? [], data: chartData };
+      } else if (type === "scalar") {
+        spec = { type: "scalar", title, value: value ?? 0 };
+        chartData = [];
+      } else if (type === "heatmap") {
+        spec = { type: "heatmap", title, matrix: matrix ?? [], xLabels: xLabels ?? [], yLabels: yLabels ?? [] };
+        chartData = [];
+      } else if (type === "stackedBar" || type === "groupBar") {
+        spec = { type, title, x: x ?? "x", groups: groups ?? [], data: chartData };
+      } else if (type === "treemap") {
+  spec = { type: "treemap", title, nodes: Array.isArray(nodes) ? (nodes as TreemapNode[]) : [] };
+        chartData = [];
       }
-
       if (!spec) {
         respond?.("Unsupported chart type");
         return <></>;
       }
-
-      const dataRecords: ChartDataRecord[] = Array.isArray(data) ? (data as ChartDataRecord[]) : [];
-      const chart: Chart = { ...spec, data: dataRecords };
-
+      const chart: Chart = spec as Chart;
       const onHumanResponse = (shouldProceed: boolean) => {
         if (!shouldProceed) {
-          respond?.("User declined adding the chart. This is not an issuue, they just don't want to add it.");
+          respond?.("User declined adding the chart. This is not an issue, they just don't want to add it.");
           return;
         }
         setState({
           ...state,
-          charts: [...state?.charts || [], chart],
+          charts: [...(state?.charts || []), chart],
         });
         respond?.({ "status": "success", "message": "Added chart successfully!" });
-      }
-
+      };
       return (
         <ChartCard
-          spec={spec}
+          spec={spec ?? { type: "line", title: "Untitled" }}
           onHumanInput={onHumanResponse}
           status={status}
-          chartData={{[title]: dataRecords }}
+          chartData={{ [title]: chartData }}
         />
       );
     },
@@ -80,16 +120,17 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       { name: "x", type: "string", required: false },
       { name: "y", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
+      { name: "columns", type: "string[]", required: false },
+      { name: "value", type: "number", required: false },
+      { name: "matrix", type: "object[]", required: false },
+      { name: "xLabels", type: "string[]", required: false },
+      { name: "yLabels", type: "string[]", required: false },
+      { name: "groups", type: "string[]", required: false },
+      { name: "nodes", type: "object[]", required: false }
     ],
-    renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { currentTitle, type, title, x, y, data } = args as {
-        currentTitle: string;
-        type?: string;
-        title?: string;
-        x?: string;
-        y?: string;
-        data?: ChartDataRecord[];
-      };
+  renderAndWaitForResponse: ({ args, respond, status }) => {
+  const currentTitle = args.currentTitle ?? "Untitled";
+  const { type = "line", title = "Untitled", x, y, data, value } = args;
 
       const currentCharts = state?.charts || [];
       const chartIndex = currentCharts.findIndex(chart => 
@@ -106,37 +147,37 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       const newTitle = title || ('title' in existingChart ? existingChart.title : 'Untitled');
 
       let spec: ChartSpec | null = null;
+      let chartData: ChartDataRecord[] = [];
       if (newType === "line") {
-        spec = { 
-          type: "line", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "x"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "y") 
-        } as LineChartSpec;
+        spec = { type: "line", title: newTitle, x: x ?? ('x' in existingChart ? existingChart.x : "x"), y: y ?? ('y' in existingChart ? existingChart.y : "y") };
+        chartData = Array.isArray(data) ? data : [];
       } else if (newType === "bar") {
-        spec = { 
-          type: "bar", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "x"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "y") 
-        } as BarChartSpec;
-      } else {
-        spec = { 
-          type: "pie", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "category"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "value") 
-        } as PieChartSpec;
+        spec = { type: "bar", title: newTitle, x: x ?? ('x' in existingChart ? existingChart.x : "x"), y: y ?? ('y' in existingChart ? existingChart.y : "y") };
+        chartData = Array.isArray(data) ? data : [];
+      } else if (newType === "pie") {
+        spec = { type: "pie", title: newTitle, x: x ?? ('x' in existingChart ? existingChart.x : "category"), y: y ?? ('y' in existingChart ? existingChart.y : "value") };
+        chartData = Array.isArray(data) ? data : [];
+      } else if (newType === "table") {
+        spec = { type: "table", title: newTitle, columns: args.columns ?? [], data: Array.isArray(data) ? data : [] };
+        chartData = Array.isArray(data) ? data : [];
+      } else if (newType === "scalar") {
+  spec = { type: "scalar", title: newTitle, value: value ?? 0 };
+        chartData = [];
+      } else if (newType === "heatmap") {
+        spec = { type: "heatmap", title: newTitle, matrix: args.matrix ?? [], xLabels: args.xLabels ?? [], yLabels: args.yLabels ?? [] };
+        chartData = [];
+      } else if (newType === "stackedBar" || newType === "groupBar") {
+        spec = { type: newType, title: newTitle, x: x ?? ('x' in existingChart ? existingChart.x : "x"), groups: args.groups ?? [], data: Array.isArray(data) ? data : [] };
+        chartData = Array.isArray(data) ? data : [];
+      } else if (newType === "treemap") {
+    spec = { type: "treemap", title: newTitle, nodes: Array.isArray(args.nodes) ? (args.nodes as TreemapNode[]) : [] };
+        chartData = [];
       }
-
       if (!spec) {
         respond?.("Unsupported chart type");
         return <></>;
       }
-
-      const newData = Array.isArray(data) ? data : existingChart.data;
-      const updatedChart: Chart = { ...spec, data: newData };
-
+      const updatedChart: Chart = spec as Chart;
       const onHumanResponse = (shouldProceed: boolean) => {
         if (!shouldProceed) {
           respond?.({ "status": "success", "message": "User declined updating the chart." });
@@ -149,8 +190,7 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
           charts: updatedCharts,
         });
         respond?.({ "status": "success", "message": "Updated chart successfully!" });
-      }
-
+      };
       return (
         <>
           <div className="mb-4">
@@ -162,7 +202,7 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
             spec={spec}
             onHumanInput={onHumanResponse}
             status={status}
-            chartData={{[newTitle]: newData }}
+            chartData={{[newTitle]: chartData }}
             actionButtonText="Update"
           />
         </>
@@ -219,7 +259,7 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
             <div className="border border-border rounded-lg p-3 bg-background">
               <ChartCard
                 spec={chartToDelete}
-                chartData={{[title]: chartToDelete.data }}
+                chartData={{[title]: 'data' in chartToDelete ? chartToDelete.data ?? [] : [] }}
               />
             </div>
           </div>

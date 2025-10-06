@@ -8,7 +8,12 @@ export type Customer = {
 export type LineChartSpec = { type: "line"; title: string; x: string; y: string };
 export type BarChartSpec = { type: "bar"; title: string; x: string; y: string };
 export type PieChartSpec = { type: "pie"; title: string; x: string; y: string };
-export type ChartSpec = LineChartSpec | BarChartSpec | PieChartSpec;
+export type TableChartSpec = { type: "table"; title: string; columns: string[]; data: ChartDataRecord[] };
+export type ScalarChartSpec = { type: "scalar"; title: string; value: number | string };
+export type HeatMapChartSpec = { type: "heatmap"; title: string; matrix: number[][]; xLabels: string[]; yLabels: string[] };
+export type StackedBarChartSpec = { type: "stackedBar" | "groupBar"; title: string; x: string; groups: string[]; data: ChartDataRecord[] };
+export type TreeMapChartSpec = { type: "treemap"; title: string; nodes: { label: string; value: number; children?: TreeMapChartSpec["nodes"] }[] };
+export type ChartSpec = LineChartSpec | BarChartSpec | PieChartSpec | TableChartSpec | ScalarChartSpec | HeatMapChartSpec | StackedBarChartSpec | TreeMapChartSpec;
 
 // Data records supplied by the agent for charts
 export type ChartDataRecord = Record<string, string | number>;
@@ -31,9 +36,15 @@ export type CashflowEntry = {
   customerId?: number;
 };
 
-export type Chart = ChartSpec & {
-  data: ChartDataRecord[];
-}
+export type Chart =
+  | (LineChartSpec & { data: ChartDataRecord[] })
+  | (BarChartSpec & { data: ChartDataRecord[] })
+  | (PieChartSpec & { data: ChartDataRecord[] })
+  | TableChartSpec
+  | ScalarChartSpec
+  | HeatMapChartSpec
+  | StackedBarChartSpec
+  | TreeMapChartSpec;
 
 export interface AgentState {
   title: string;
