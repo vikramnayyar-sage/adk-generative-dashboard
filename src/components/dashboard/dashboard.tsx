@@ -21,8 +21,8 @@ export function MainLayout({ className }: { className?: string }) {
   useCashflowActions({ state, setState });
 
   return (
-    <div className={cn("min-h-screen bg-background text-foreground", className)}>
-      <div className="max-w-6xl mx-auto p-4 grid gap-4">
+    <div className={cn("min-h-screen bg-gray-50 text-gray-900", className)}>
+      <div className="max-w-5xl mx-auto p-8 grid gap-8 bg-white rounded-xl shadow-lg mt-8">
         <PinnedMetrics state={state} setState={setState} />
         <Charts state={state} setState={setState} />
         <CashflowSummary state={state} setState={setState} />

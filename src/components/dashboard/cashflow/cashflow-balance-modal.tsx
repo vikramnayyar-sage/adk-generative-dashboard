@@ -29,26 +29,33 @@ export function CashflowBalanceModal({ state, setState, isOpen, setIsOpen }: Cas
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* DialogTrigger removed; modal is now opened only from summary button */}
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md rounded-xl shadow-2xl bg-white p-6 border border-gray-200">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold text-gray-800">
+            <DollarSign className="h-5 w-5 text-green-600" />
             Set Starting Balance
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
-          <label className="font-medium">Starting Balance (USD)</label>
+          <label className="font-medium text-gray-700">Starting Balance (USD)</label>
           <input
             type="number"
-            className="border rounded px-3 py-2 text-lg"
+            className="border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             value={balance}
             onChange={e => setBalance(Number(e.target.value))}
             min={0}
           />
-          <Button onClick={handleSave} className="mt-2">Save</Button>
+        </div>
+        <div className="flex justify-end mt-4">
+          <button
+            className="bg-green-600 text-white px-5 py-2 rounded-lg shadow hover:bg-green-700 transition"
+            onClick={handleSave}
+          >
+            Save
+          </button>
         </div>
       </DialogContent>
     </Dialog>
   );
+// ...existing code...
 }

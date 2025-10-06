@@ -74,14 +74,14 @@ export function CashflowModal({ state, setState }: CashflowModalProps) {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
+      <DialogContent className="w-[98vw] max-w-none h-[85vh] overflow-hidden rounded-xl shadow-2xl bg-white border border-gray-200 p-0">
+        <DialogHeader className="p-6 pb-4 border-b border-gray-100 flex-shrink-0">
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold text-gray-800">
+            <DollarSign className="h-5 w-5 text-green-600" />
             Cashflow Management
           </DialogTitle>
         </DialogHeader>
-        <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="overflow-y-auto flex-1 p-6">
           <CashflowTable
             entries={cashflowEntries}
             onAddEntry={handleAddEntry}
