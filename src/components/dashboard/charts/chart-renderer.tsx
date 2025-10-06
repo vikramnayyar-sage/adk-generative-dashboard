@@ -22,9 +22,6 @@ import {
 } from "@/components/ui/chart";
 import type { ChartSpec, LineChartSpec, BarChartSpec, PieChartSpec, ChartDataRecord } from "@/lib/types";
 
-function safeVar(name: string) {
-  return String(name).toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
-}
 
 interface ChartRendererProps {
   spec: ChartSpec;
@@ -37,11 +34,23 @@ export function ChartRenderer({ spec, data }: ChartRendererProps) {
   return <PieChart spec={spec as PieChartSpec} data={data} />;
 }
 
-const chartColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+// Accessible, high-contrast color palette for charts
+const chartColors = [
+  "#1976d2", // blue
+  "#d32f2f", // red
+  "#388e3c", // green
+  "#fbc02d", // yellow
+  "#7b1fa2", // purple
+  "#f57c00", // orange
+  "#0288d1", // cyan
+  "#c2185b", // magenta
+  "#455a64", // dark gray
+  "#8bc34a"  // light green
+];
 
 function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-1)" },
+    [spec.y]: { label: spec.y, color: chartColors[0] },
   }), [spec.y]);
 
   return (
@@ -53,7 +62,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
           <YAxis tickLine={false} axisLine={false} tickMargin={8} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Line type="monotone" dataKey={spec.y} stroke={`var(--color-${safeVar(spec.y)})`} strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey={spec.y} stroke={chartColors[0]} strokeWidth={2} dot={false} />
         </RLineChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -62,7 +71,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
 
 function BarChart({ spec, data }: { spec: BarChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-2)" },
+    [spec.y]: { label: spec.y, color: chartColors[1] },
   }), [spec.y]);
 
   return (

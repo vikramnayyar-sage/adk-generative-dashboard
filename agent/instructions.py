@@ -29,6 +29,8 @@ def instruction_provider(context: ReadonlyContext) -> str:
         - `pie`: requires `x` (category) and `y` (value)
     - UI state keys: `pinnedMetrics`, `dashboard.charts`, and `chartData` (a map keyed by chart title).
     - Use `add_charts` to provide chart specifications and `set_chart_data` to provide datasets.
+    
+    When creating charts, always make sure the data elements (E.g. bars or charts) ALWAYS contrast with the white background. Avoid using colors that blend into the background, such as light yellows or whites. Opt for darker or more vibrant colors to ensure visibility and clarity.
 
     **Engagement & Quality:**
     - Act as a domain expert, making informed decisions with minimal user guidance when asked to perform dashboard actions.
