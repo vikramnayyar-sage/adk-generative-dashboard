@@ -80,17 +80,18 @@ export const useCashflowActions = ({ state, setState }: UseCashflowActionsProps)
   // Update Cashflow Entry Action
   useCopilotAction({
     name: "update_cashflow_entry",
-    description: "Update an existing cashflow entry by ID or name.",
+    description: "Update an existing cashflow entry by ID or name. Supports percentage-based updates (e.g. 'reduce by 10%').",
     parameters: [
       { name: "identifier", type: "string", required: true, description: "ID (number) or name of the entry to update" },
       { name: "name", type: "string", required: false, description: "New name for the entry" },
-      { name: "amount", type: "number", required: false, description: "New amount" },
+      { name: "amount", type: "number", required: false, description: "New amount (absolute or percentage change)" },
+      { name: "amountPercent", type: "number", required: false, description: "Percent change to apply to amount (e.g. -10 for reduce by 10%)" },
       { name: "dateDue", type: "string", required: false, description: "New due date in YYYY-MM-DD format" },
       { name: "type", type: "string", required: false, description: "New type: 'in' or 'out'" },
     ],
-    handler: async ({ identifier, name, amount, dateDue, type }) => {
+    handler: async ({ identifier, name, amount, amountPercent, dateDue, type }) => {
       const currentEntries = state?.cashflowEntries || [];
-      
+      // Find entry by ID or name (case-insensitive, partial match)
       const entryIndex = currentEntries.findIndex(entry => 
         entry.id.toString() === identifier || 
         entry.name.toLowerCase().includes(identifier.toLowerCase())
@@ -102,24 +103,41 @@ export const useCashflowActions = ({ state, setState }: UseCashflowActionsProps)
 
       const updatedEntries = [...currentEntries];
       const originalEntry = updatedEntries[entryIndex];
-      
+      let newAmount = originalEntry.amount;
+      // If amountPercent is provided, apply percentage change
+      if (typeof amountPercent === "number" && !isNaN(amountPercent)) {
+        newAmount = Math.round(originalEntry.amount * (1 + amountPercent / 100));
+      } else if (typeof amount === "number" && !isNaN(amount)) {
+        newAmount = Math.abs(amount);
+      }
+
       updatedEntries[entryIndex] = {
         ...originalEntry,
         ...(name && { name }),
-        ...(amount !== undefined && { amount: Math.abs(amount) }),
+        ...(newAmount !== undefined && { amount: newAmount }),
         ...(dateDue && { dateDue }),
         ...(type && { type: type as "in" | "out" })
       };
 
       setState(prevState => ({
-        ...prevState,
         title: prevState?.title || "Dashboard",
         charts: prevState?.charts || [],
         pinnedMetrics: prevState?.pinnedMetrics || [],
-        cashflowEntries: updatedEntries
+        cashflowEntries: updatedEntries,
+        startingBalance: prevState?.startingBalance ?? 0,
+        creditors: prevState?.creditors ?? [],
+        debitors: prevState?.debitors ?? [],
+        netCashflow: prevState?.netCashflow ?? 0
       }));
 
-      return `Successfully updated cashflow entry: ${updatedEntries[entryIndex].name}`;
+      let changeMsg = "";
+      if (typeof amountPercent === "number" && !isNaN(amountPercent)) {
+        changeMsg = `Amount changed by ${amountPercent > 0 ? "+" : ""}${amountPercent}% (was $${originalEntry.amount}, now $${newAmount})`;
+      } else if (typeof amount === "number" && !isNaN(amount)) {
+        changeMsg = `Amount set to $${newAmount}`;
+      }
+
+      return `Successfully updated cashflow entry: ${updatedEntries[entryIndex].name}. ${changeMsg}`;
     },
   });
 
