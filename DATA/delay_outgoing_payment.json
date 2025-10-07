@@ -1,0 +1,47 @@
+{
+  "objective": "Delay outgoing payments strategically to conserve cash and optimize cashflow.",
+  "strategies": [
+    {
+      "method": "Negotiate Extended Payment Terms",
+      "description": "Discuss with suppliers to extend payment terms from standard (e.g., Net 30) to longer (e.g., Net 45 or Net 60).",
+      "impact": "Improves short-term cash availability.",
+      "parameters": {
+        "target_terms": "Net 45-60"
+      }
+    },
+    {
+      "method": "Partial Payment Agreement",
+      "description": "Pay a portion of the invoice now and schedule the remainder later.",
+      "impact": "Maintains supplier relationship while easing immediate cash pressure.",
+      "parameters": {
+        "initial_payment": "30-50%",
+        "balance_due": "Later date"
+      }
+    },
+    {
+      "method": "Batch Payments by Priority",
+      "description": "Rank invoices by importance and due date; pay critical vendors first.",
+      "impact": "Delays non-essential payments without disrupting operations."
+    },
+    {
+      "method": "Supplier Financing Programs",
+      "description": "Use supplier-provided financing or third-party pay-later programs.",
+      "impact": "Defers cash outflow while ensuring supplier is paid on time."
+    },
+    {
+      "method": "Credit Card Payments",
+      "description": "Use business credit cards to pay suppliers, leveraging billing cycles to delay cash outflow.",
+      "impact": "Extends payment window by 15-45 days depending on card terms."
+    },
+    {
+      "method": "Invoice Dispute or Validation Delay",
+      "description": "Request clarifications or dispute parts of an invoice if errors exist.",
+      "impact": "Provides legitimate delay while resolving discrepancies."
+    },
+    {
+      "method": "Early Payment Consolidation",
+      "description": "Combine multiple smaller payments into one larger batch at a later date.",
+      "impact": "Improves control over outgoing cash and reduces transaction overhead."
+    }
+  ]
+}

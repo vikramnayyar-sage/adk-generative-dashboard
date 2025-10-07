@@ -1,0 +1,45 @@
+{
+  "objective": "Promote earlier payments from customers to improve incoming cashflow.",
+  "strategies": [
+    {
+      "method": "Early Payment Discount",
+      "description": "Offer a small percentage discount (e.g., 2%) if the customer pays within a short timeframe (e.g., 10 days).",
+      "impact": "Reduces revenue slightly but accelerates cash inflow.",
+      "parameters": {
+        "discount_rate": "1-3%",
+        "payment_window": "7-15 days"
+      }
+    },
+    {
+      "method": "Installment Plan with Upfront Payment",
+      "description": "Allow customer to pay in installments, but require an initial upfront payment.",
+      "impact": "Ensures partial cash inflow early while maintaining flexibility for customer.",
+      "parameters": {
+        "upfront_percentage": "30-50%"
+      }
+    },
+    {
+      "method": "Invoice Factoring",
+      "description": "Sell unpaid invoices to a factoring company for immediate cash.",
+      "impact": "Immediate liquidity with a fee; reduces accounts receivable.",
+      "parameters": {
+        "factoring_fee": "1-5%"
+      }
+    },
+    {
+      "method": "Payment Portal with Reminders",
+      "description": "Automate invoice reminders and provide easy payment methods (ACH, credit card).",
+      "impact": "Reduces delays caused by manual follow-ups and friction in payment process."
+    },
+    {
+      "method": "Retainer or Subscription Model",
+      "description": "Convert one-time billing into recurring or upfront retainer payments.",
+      "impact": "Predictable and regular cash inflows; shifts payment earlier in cycle."
+    },
+    {
+      "method": "Customer Credit Checks",
+      "description": "Assess customer payment behavior and offer shorter terms to reliable payers.",
+      "impact": "Reduces late payments and improves payment predictability."
+    }
+  ]
+}
