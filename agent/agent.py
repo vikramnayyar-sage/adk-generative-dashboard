@@ -14,10 +14,40 @@ from modifiers import before_model, after_model
 from tools import tools
 from instructions import instruction_provider
 
+
+import os
+import json
+from state import Dashboard, CashflowEntry
+
+def load_mock_data():
+  mock_path = os.path.join(os.path.dirname(__file__), '..', 'DATA', 'MOCK.json')
+  try:
+    with open(mock_path, 'r') as f:
+      data = json.load(f)
+    # Convert dicts to CashflowEntry objects
+    return [CashflowEntry(**entry) for entry in data]
+  except Exception as e:
+    print(f"Error loading MOCK.json: {e}")
+    return []
+
 def on_before_agent(callback_context: CallbackContext):
   """
-  Initialize dashboard state if it doesn't exist.
+  Initialize dashboard state if it doesn't exist, and inject mock data.
   """
+  state = callback_context.state
+  if state is not None and 'cashflowEntries' in state:
+    return None
+  mock_entries = load_mock_data()
+  # If state is None, initialize as Dashboard
+  if state is None:
+    callback_context.state = Dashboard(
+      title="Demo Dashboard",
+      pinnedMetrics=[],
+      charts=[],
+      cashflowEntries=mock_entries
+    ).dict()
+  else:
+    callback_context.state['cashflowEntries'] = [entry.dict() for entry in mock_entries]
   return None
 
 search_agent = Agent(

@@ -31,8 +31,21 @@ class Chart(BaseModel):
     y: Optional[str] = None
     data: List[ChartDataRecord] = Field(default_factory=list)
 
+
+# Cashflow entry matching MOCK.json
+class CashflowEntry(BaseModel):
+    date: str
+    type: Literal["incoming", "outgoing"]
+    amount: float
+    party: str
+    category: str
+    status: str
+    balance_after: float
+    event_flags: List[str] = Field(default_factory=list)
+
 class Dashboard(BaseModel):
     """A dashboard spec matching the UI shape."""
     title: str
     pinnedMetrics: List[Metric] = Field(default_factory=list)
     charts: List[Chart] = Field(default_factory=list)
+    cashflowEntries: List[CashflowEntry] = Field(default_factory=list)

@@ -19,10 +19,23 @@ export type Chart = ChartSpec & {
   data: ChartDataRecord[];
 }
 
+
+export type CashflowEntry = {
+  date: string;
+  type: "incoming" | "outgoing";
+  amount: number;
+  party: string;
+  category: string;
+  status: string;
+  balance_after: number;
+  event_flags: string[];
+};
+
 export type AgentState = {
-  title: string; 
+  title: string;
   charts: Chart[];
   pinnedMetrics: Metric[];
+  cashflowEntries?: CashflowEntry[];
 };
 
 export type AgentSetState<T extends AgentState> = (newState: T | ((prevState: T | undefined) => T)) => void

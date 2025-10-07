@@ -1,3 +1,4 @@
+import { CashflowSummaryToggle } from "./CashflowSummaryToggle";
 import { useCoAgent } from "@copilotkit/react-core";
 import { AgentState } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,10 @@ export function MainLayout({ className }: { className?: string }) {
       <div className="max-w-6xl mx-auto p-4 grid gap-4">
         <PinnedMetrics state={state} setState={setState} />
         <Charts state={state} setState={setState} />
+        {/* Cashflow summary hidden by default, shown via button */}
+        {state.cashflowEntries && (
+          <CashflowSummaryToggle entries={state.cashflowEntries} />
+        )}
       </div>
     </div>
   );
