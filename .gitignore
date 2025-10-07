@@ -51,3 +51,5 @@ bun.lockb
 agent/venv/
 agent/__pycache__/
 agent/.venv/
+agent/mcp/__pycache__/main.cpython-313.pyc
+/agent/INGESTS

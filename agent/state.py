@@ -25,11 +25,26 @@ ChartDataMap = Dict[str, List[ChartDataRecord]]
 
 class Chart(BaseModel):
     """A single chart description in the dashboard spec."""
-    type: Literal["line", "bar", "pie"] = Field(description='Chart type: "line" | "bar" | "pie"')
+    type: Literal[
+        "line", "bar", "pie", "table", "scalar", "heatmap", "stackedBar", "groupBar", "treemap"
+    ] = Field(description='Chart type: "line" | "bar" | "pie" | "table" | "scalar" | "heatmap" | "stackedBar" | "groupBar" | "treemap"')
     title: str
+    # For line/bar/pie
     x: Optional[str] = None
     y: Optional[str] = None
-    data: List[ChartDataRecord] = Field(default_factory=list)
+    data: Optional[List[ChartDataRecord]] = None
+    # For table
+    columns: Optional[List[str]] = None
+    # For scalar
+    value: Optional[Union[str, float, int]] = None
+    # For heatmap
+    matrix: Optional[List[List[float]]] = None
+    xLabels: Optional[List[str]] = None
+    yLabels: Optional[List[str]] = None
+    # For stacked/group bar
+    groups: Optional[List[str]] = None
+    # For treemap
+    nodes: Optional[List[Dict]] = None
 
 class Dashboard(BaseModel):
     """A dashboard spec matching the UI shape."""

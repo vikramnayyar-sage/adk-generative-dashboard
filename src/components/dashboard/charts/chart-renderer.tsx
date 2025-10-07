@@ -1,47 +1,107 @@
 import { useMemo } from "react";
-import {
-  ResponsiveContainer,
-  LineChart as RLineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  BarChart as RBarChart,
-  Bar,
-  PieChart as RPieChart,
-  Pie,
-  Cell,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-  type ChartConfig,
-} from "@/components/ui/chart";
-import type { ChartSpec, LineChartSpec, BarChartSpec, PieChartSpec, ChartDataRecord } from "@/lib/types";
+import { ResponsiveContainer, LineChart as RLineChart, Line, XAxis, YAxis, CartesianGrid, BarChart as RBarChart, Bar, PieChart as RPieChart, Pie, Cell } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart";
+import type { TableChartSpec, ScalarChartSpec, HeatMapChartSpec, StackedBarChartSpec, TreeMapChartSpec, ChartSpec, LineChartSpec, BarChartSpec, PieChartSpec, ChartDataRecord } from "@/lib/types";
 
-function safeVar(name: string) {
-  return String(name).toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
+function TableChart({ spec }: { spec: TableChartSpec }) {
+  // TODO: Implement table rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr>
+            {spec.columns?.map((col: string) => <th key={col} className="border-b p-2 text-left">{col}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {spec.data?.map((row, i) => (
+            <tr key={i}>
+              {spec.columns?.map((col: string) => <td key={col} className="border-b p-2">{row[col]}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+        );
+      }
+
+      function ScalarChart({ spec }: { spec: ScalarChartSpec }) {
+  // TODO: Implement scalar rendering
+  return (
+    <div className="bg-white border rounded p-4 flex flex-col items-center justify-center">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <div className="text-3xl font-mono text-blue-700">{spec.value}</div>
+    </div>
+  );
 }
 
-interface ChartRendererProps {
-  spec: ChartSpec;
-  data: ChartDataRecord[];
+function HeatMapChart({ spec }: { spec: HeatMapChartSpec }) {
+  // TODO: Implement heatmap rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <table className="w-full text-xs">
+        <thead>
+          <tr>
+            <th></th>
+            {spec.xLabels?.map((x: string) => <th key={x}>{x}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {spec.matrix?.map((row: number[], i: number) => (
+            <tr key={i}>
+              <td className="font-bold">{spec.yLabels?.[i]}</td>
+              {row.map((val: number, j: number) => (
+                <td key={j} style={{ background: `rgba(25, 118, 210, ${Math.min(1, val / 10)})`, color: val > 5 ? 'white' : 'black' }}>
+                  {val}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
-export function ChartRenderer({ spec, data }: ChartRendererProps) {
-  if (spec.type === "line") return <LineChart spec={spec as LineChartSpec} data={data} />;
-  if (spec.type === "bar") return <BarChart spec={spec as BarChartSpec} data={data} />;
-  return <PieChart spec={spec as PieChartSpec} data={data} />;
+function StackedBarChart({ spec }: { spec: StackedBarChartSpec }) {
+  // TODO: Implement stacked/group bar rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <div className="text-xs">Stacked/group bar chart rendering coming soon.</div>
+    </div>
+  );
 }
 
-const chartColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+function TreeMapChart({ spec }: { spec: TreeMapChartSpec }) {
+  // TODO: Implement treemap rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <div className="text-xs">Treemap rendering coming soon.</div>
+    </div>
+  );
+  }
+
+// Accessible, high-contrast color palette for charts
+const chartColors = [
+  "#1976d2", // blue
+  "#d32f2f", // red
+  "#388e3c", // green
+  "#fbc02d", // yellow
+  "#7b1fa2", // purple
+  "#f57c00", // orange
+  "#0288d1", // cyan
+  "#c2185b", // magenta
+  "#455a64", // dark gray
+  "#8bc34a"  // light green
+];
 
 function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-1)" },
+    [spec.y]: { label: spec.y, color: chartColors[0] },
   }), [spec.y]);
 
   return (
@@ -53,7 +113,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
           <YAxis tickLine={false} axisLine={false} tickMargin={8} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Line type="monotone" dataKey={spec.y} stroke={`var(--color-${safeVar(spec.y)})`} strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey={spec.y} stroke={chartColors[0]} strokeWidth={2} dot={false} />
         </RLineChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -62,7 +122,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
 
 function BarChart({ spec, data }: { spec: BarChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-2)" },
+    [spec.y]: { label: spec.y, color: chartColors[1] },
   }), [spec.y]);
 
   return (
@@ -106,4 +166,16 @@ function PieChart({ spec, data }: { spec: PieChartSpec; data: ChartDataRecord[] 
       </ResponsiveContainer>
     </ChartContainer>
   );
+}
+
+export function ChartRenderer({ spec, data }: { spec: ChartSpec; data: ChartDataRecord[] }) {
+  if (spec.type === "line") return <LineChart spec={spec as LineChartSpec} data={data} />;
+  if (spec.type === "bar") return <BarChart spec={spec as BarChartSpec} data={data} />;
+  if (spec.type === "pie") return <PieChart spec={spec as PieChartSpec} data={data} />;
+  if (spec.type === "table") return <TableChart spec={spec as TableChartSpec} />;
+  if (spec.type === "scalar") return <ScalarChart spec={spec as ScalarChartSpec} />;
+  if (spec.type === "heatmap") return <HeatMapChart spec={spec as HeatMapChartSpec} />;
+  if (spec.type === "stackedBar" || spec.type === "groupBar") return <StackedBarChart spec={spec as StackedBarChartSpec} />;
+  if (spec.type === "treemap") return <TreeMapChart spec={spec as TreeMapChartSpec} />;
+  return <div>Unsupported chart type: {spec.type}</div>;
 }
