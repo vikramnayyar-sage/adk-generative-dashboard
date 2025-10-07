@@ -51,3 +51,6 @@ bun.lockb
 agent/venv/
 agent/__pycache__/
 agent/.venv/
+agent/INGESTS/REACT-GRID-LAYOUT.md
+agent/INGESTS/COPILOTKIT.md
+*.pyc
