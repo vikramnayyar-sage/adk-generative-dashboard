@@ -1,0 +1,102 @@
+[
+  {
+    "date": "2025-09-10",
+    "type": "incoming",
+    "amount": 2500,
+    "party": "Client Alpha",
+    "category": "Sales",
+    "status": "settled",
+    "balance_after": 2500,
+    "event_flags": []
+  },
+  {
+    "date": "2025-09-12",
+    "type": "outgoing",
+    "amount": 1800,
+    "party": "Supplier X",
+    "category": "Materials",
+    "status": "settled",
+    "balance_after": 700,
+    "event_flags": []
+  },
+  {
+    "date": "2025-09-17",
+    "type": "incoming",
+    "amount": 2000,
+    "party": "Client Beta",
+    "category": "Sales",
+    "status": "settled",
+    "balance_after": 2700,
+    "event_flags": []
+  },
+  {
+    "date": "2025-09-20",
+    "type": "outgoing",
+    "amount": 2500,
+    "party": "Office Lease",
+    "category": "Rent",
+    "status": "settled",
+    "balance_after": 200,
+    "event_flags": []
+  },
+  {
+    "date": "2025-09-28",
+    "type": "outgoing",
+    "amount": 2800,
+    "party": "Payroll",
+    "category": "Staff",
+    "status": "predicted",
+    "balance_after": -2600,
+    "event_flags": ["overdrawn"]
+  },
+  {
+    "date": "2025-10-03",
+    "type": "incoming",
+    "amount": 3500,
+    "party": "Client Gamma",
+    "category": "Sales",
+    "status": "predicted",
+    "balance_after": 900,
+    "event_flags": ["recovered"]
+  },
+  {
+    "date": "2025-10-06",
+    "type": "outgoing",
+    "amount": 1500,
+    "party": "Supplier Y",
+    "category": "Operations",
+    "status": "predicted",
+    "balance_after": -600,
+    "event_flags": ["overdrawn"]
+  },
+  {
+    "date": "2025-10-12",
+    "type": "incoming",
+    "amount": 2000,
+    "party": "Client Delta",
+    "category": "Sales",
+    "status": "predicted",
+    "balance_after": 1400,
+    "event_flags": []
+  },
+  {
+    "date": "2025-10-18",
+    "type": "outgoing",
+    "amount": 1800,
+    "party": "Supplier Z",
+    "category": "Inventory",
+    "status": "predicted",
+    "balance_after": -400,
+    "event_flags": ["overdrawn"]
+  },
+  {
+    "date": "2025-10-25",
+    "type": "incoming",
+    "amount": 3000,
+    "party": "Client Omega",
+    "category": "Sales",
+    "status": "predicted",
+    "balance_after": 2600,
+    "event_flags": []
+  }
+]
