@@ -17,12 +17,18 @@ export function Chat({className}: ChatProps) {
         <CopilotChat
           className="flex-1 min-h-0"
           labels={{
-          initial: "👋 Hi!\n\nI'm here to help you build beautiful dashboards and charts using your business data.\n\nTry some of the suggestions below, or ask me to visualize your cashflow, metrics, or any custom data!"
+          initial: "👋 Hi!\n\nI'm here to help you analyze your cashflow and build insightful visualizations.\n\nTry some of the suggestions below, or ask me anything about your cashflow data!"
           }}
           suggestions={[
-            { title: "Pizza sales", message: "Please rebuild the dashboard to help me keep track of the current trends in the Pizza industry." },
-            { title: "AI growth", message: "Please rebuild the dashboard to help me keep track of the current trends in the AI industry." },
-            { title: "Music trends", message: "Please rebuild the dashboard to help me keep track of the current trends in the Music industry." },
+            // Old suggestions - commented out
+            // { title: "Pizza sales", message: "Please rebuild the dashboard to help me keep track of the current trends in the Pizza industry." },
+            // { title: "AI growth", message: "Please rebuild the dashboard to help me keep track of the current trends in the AI industry." },
+            // { title: "Music trends", message: "Please rebuild the dashboard to help me keep track of the current trends in the Music industry." },
+
+            // New cashflow-focused suggestions
+            { title: "Inflows vs Outflows", message: "Create a bar chart showing total inflows vs total outflows" },
+            { title: "Balance Trend", message: "Show me a line chart of the balance over time" },
+            { title: "Top Expenses", message: "Create a chart showing my top 5 outgoing payments" },
           ]}
           Input={SidebarInput}
           AssistantMessage={AssistantBubble}
