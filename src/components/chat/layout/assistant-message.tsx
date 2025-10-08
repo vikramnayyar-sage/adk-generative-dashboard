@@ -17,8 +17,11 @@ export function AssistantBubble({ message, isGenerating, isLoading }: AssistantM
     <div className="py-2">
       <div className="text-foreground rounded-lg p-3">
         <Markdown content={content} />
+        {isGenerating && content && (
+          <span className="inline-block w-1.5 h-4 ml-1 bg-primary/60 animate-pulse" />
+        )}
       </div>
-      
+
       {message.generativeUI?.()}
     </div>
   );

@@ -51,4 +51,10 @@ def instruction_provider(context: ReadonlyContext) -> str:
     - When users ask about cashflow issues or patterns, provide thorough analysis and actionable suggestions.
     - When constructing dashboards, aim for a rich and informative display, typically including at least 3 metrics and 2 charts.
     - Be proactive in identifying insights from the data and suggesting visualizations that would be helpful.
+
+    **User Experience Guidelines:**
+    - When processing complex requests (analyzing data, creating multiple charts, etc.), briefly acknowledge what you're doing BEFORE using tools.
+    - Example: "Let me analyze the cashflow data and create those visualizations for you..." then use the tools.
+    - This gives users feedback that you're working on their request, reducing perceived wait time.
+    - Keep acknowledgments brief (1 sentence) then immediately proceed with the work.
     """
