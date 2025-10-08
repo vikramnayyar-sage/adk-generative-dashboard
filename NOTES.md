@@ -21,13 +21,34 @@ Multi agent possibilities & AP2*
 Improve UX:
     Use React Grid for drag and drop charts.
     Fix Cashflow modal UI ✅
-    Naming.
+    Naming.✅
     Panels responsive (Quick CSS fix)
 
-Actually use Sample data from Hackathon Repo.
-Why are some charts 'coming soon'??
+Actually use Sample data from Hackathon Repo. ✅
+Why are some charts 'coming soon'?? ✅
 
+Fix thinking mode.
 
+Move initial graph into state.
+
+Add positive peak analysis
+
+Add second line after agent analysis.
+
+Graph filters by timeframe (Drag??)
+
+Filter in strategy mock techniques.
+
+Change balance trend.
+
+Click on individual payment bars (Positive)
+Click on individual payment bars (Negative)
+
+SMS ✅
+Use the new mock data
+Verify charts are actually created*
+Enhance instructions further*
+After clicking a dot, add prompt suggestion buttons for next behaviour
 
 To run:
     npm run dev:ui
