@@ -54,6 +54,7 @@ def on_before_agent(callback_context: CallbackContext):
     callback_context.state['cashflowEntries'] = [entry.dict() for entry in mock_entries]
   return None
 
+
 mcp_toolset = McpToolset(
     connection_params=StdioConnectionParams(
         server_params=StdioServerParameters(
@@ -80,27 +81,6 @@ search_agent = Agent(
     mcp_toolset #FROM TEST MCP Server.
   ],
 )
-
-print(f"TOOLS:")
-print(tools)
-print(f"MCP TOOLSET:")
-print(mcp_toolset)
-
-
-
-search_agent = Agent(
-  model='gemini-2.0-flash',
-  name='SearchAgent',
-  instruction="""
-  You're a specialist in Google Search
-  """,
-  tools=[
-    google_search,
-    mcp_toolset #FROM TEST MCP Server.
-  
-  ],
-)
-
 
 dashboard_agent = Agent(
   name="DashboardAgent",

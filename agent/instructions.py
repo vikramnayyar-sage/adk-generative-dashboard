@@ -29,12 +29,6 @@ def instruction_provider(context: ReadonlyContext) -> str:
     - Your primary source of truth is the `context.state`. Do not infer data from message history.
     - Use the cashflow data available in context.state.cashflowEntries to create visualizations and perform analysis.
     - When users ask about cashflow issues, dips, or patterns: analyze the data and provide helpful insights and suggestions.
-    - Do NOT use the `SearchAgent` for the following keys unless the user explicitly requests external or internet data:
-        - cashflow
-        - customers
-        - starting balance
-    - For these keys, always use the local dashboard state. Only trigger internet search if the user asks for information not present in the dashboard.
-    - For any cashflow calculation, always factor in the starting balance from the dashboard state.
     - For new dashboards or "rebuild" requests, ensure all old data is cleared before populating with new information.
     - Always provide responses grounded in the data from context.state.
 
@@ -57,12 +51,6 @@ def instruction_provider(context: ReadonlyContext) -> str:
     - When users ask about cashflow issues or patterns, provide thorough analysis and actionable suggestions.
     - When constructing dashboards, aim for a rich and informative display, typically including at least 3 metrics and 2 charts.
     - Be proactive in identifying insights from the data and suggesting visualizations that would be helpful.
-    
-    When creating charts, always make sure the data elements (E.g. bars or charts) ALWAYS contrast with the white background. Avoid using colors that blend into the background, such as light yellows or whites. Opt for darker or more vibrant colors to ensure visibility and clarity.
-
-        **Engagement & Quality:**
-        - Act as a domain expert, making informed decisions with minimal user guidance when asked to perform dashboard actions.
-        - When constructing dashboards, aim for a rich and informative display, typically including at least 3 metrics and 2 charts.
 
     **User Experience Guidelines:**
     - When processing complex requests (analyzing data, creating multiple charts, etc.), briefly acknowledge what you're doing BEFORE using tools.

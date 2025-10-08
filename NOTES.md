@@ -65,4 +65,3 @@ LINKS:
     https://mailosaur.com/sms-testing?ppc_source=22040733043-175904385001-mailosaur&utm_term=mailosaur&utm_campaign=Search+%7C+Branded+Keywords&utm_source=adwords&utm_medium=ppc&hsa_acc=5285978464&hsa_cam=22040733043&hsa_grp=175904385001&hsa_ad=752024807496&hsa_src=g&hsa_tgt=kwd-883138294966&hsa_kw=mailosaur&hsa_mt=p&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=22040733043&gbraid=0AAAAADRaWdaHS9rYf4HoyPlXzsWbtzpY3&gclid=CjwKCAjwi4PHBhA-EiwAnjTHuWxPAfvCgikOSZ97NpvYawrIJSHVX337R-vBc4OknvRDtwPaW-n5WxoCLMQQAvD_BwE (For phone, use mailinator for emails)
 
      
-    

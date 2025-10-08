@@ -7,6 +7,3 @@ google-genai
 ag-ui-adk
 tavily-python
 dotenv
-fastmcp
-mcp
-mailtrap
