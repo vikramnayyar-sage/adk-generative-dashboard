@@ -50,25 +50,27 @@ def on_before_agent(callback_context: CallbackContext):
     callback_context.state['cashflowEntries'] = [entry.dict() for entry in mock_entries]
   return None
 
-search_agent = Agent(
-    model='gemini-2.0-flash',
-    name='SearchAgent',
-    instruction="""
-    You're a specialist in Google Search
-    """,
-    tools=[google_search],
-)
+# Commenting out SearchAgent to improve performance - not needed for dashboard
+# search_agent = Agent(
+#     model='gemini-2.0-flash',
+#     name='SearchAgent',
+#     instruction="""
+#     You're a specialist in Google Search
+#     """,
+#     tools=[google_search],
+# )
 
 dashboard_agent = Agent(
   name="DashboardAgent",
   model="gemini-2.5-flash",
-  tools=tools + [AgentTool(agent=search_agent)],
+  tools=tools,  # Removed SearchAgent for better performance
+  # tools=tools + [AgentTool(agent=search_agent)],  # Original with SearchAgent
 
   # run-loop modifiers
   before_agent_callback=on_before_agent,
   before_model_callback=before_model,
   after_model_callback = after_model,
-  
+
   # system instructions
   instruction=instruction_provider,
 )

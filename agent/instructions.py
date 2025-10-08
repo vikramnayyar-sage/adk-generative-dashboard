@@ -12,10 +12,10 @@ def instruction_provider(context: ReadonlyContext) -> str:
     The current date is {datetime.now().strftime("%Y-%m-%d")}.
 
     **Key Guidelines:**
-    - Your primary source of truth is the `context.state` and information retrieved via the `SearchAgent`. Do not infer data from message history.
-    - When asked to build or edit the dashboard, always use the `SearchAgent` to gather necessary data.
+    - Your primary source of truth is the `context.state`. Do not infer data from message history.
+    - Use the cashflow data available in context.state.cashflowEntries to create visualizations.
     - For new dashboards or "rebuild" requests, ensure all old data is cleared before populating with new information.
-    - Always provide responses grounded in real data. Only generate speculative content if explicitly instructed by the user.
+    - Always provide responses grounded in the data from context.state. Use the mock cashflow data for all visualizations.
 
     **Dashboard Elements & Tools:**
     - Supported chart types:

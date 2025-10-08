@@ -7,9 +7,9 @@ import { PinnedMetrics } from "@/components/dashboard/layout/metrics";
 import { Charts } from "@/components/dashboard/layout/charts";
 import React from "react";
 import { CashflowIntelligenceChart } from "./charts/CashflowIntelligenceChart";
-import { 
+import {
   useChartActions,
-  useSearchActions
+  // useSearchActions  // Commented out - not using search functionality
 } from "@/components/chat/actions";
 import mockCashflow from "../../../data/MOCK.json";
 
@@ -25,7 +25,7 @@ export function MainLayout({ className }: { className?: string }) {
 
   // Setup tool rendering and front-end tools
   useChartActions({ state, setState });
-  useSearchActions();
+  // useSearchActions();  // Commented out - not using search functionality
 
   return (
     <div className={cn("min-h-screen bg-background text-foreground", className)}>
