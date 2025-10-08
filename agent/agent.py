@@ -60,7 +60,7 @@ mcp_toolset = McpToolset(
         server_params=StdioServerParameters(
             command="fastmcp",
             args=["run", "main.py:mcp"],
-            cwd="c:/Dev/hackathon-prep/adk-generative-dashboard/agent/mcp",
+            cwd="c:/Dev/hackathon-prep/adk-generative-dashboard/agent/mcp", #ADJUST PATH AS NEEDED
         )
     )
 )
