@@ -76,14 +76,18 @@ export function ChartGrid({ charts, onRemoveChart, onEditChart }: ChartGridProps
 function ChartEditModal({ spec, onCancel, onSave }: { spec: ChartSpec; onCancel: () => void; onSave: (next: ChartSpec) => void }) {
   const [title, setTitle] = useState<string>('title' in spec ? spec.title : "");
   const [x, setX] = useState<string>('x' in spec ? spec.x : "");
-  const [y, setY] = useState<string>('y' in spec ? spec.y : "");
-  const [steps, setSteps] = useState<string>('steps' in spec && Array.isArray(spec.steps) ? spec.steps.join(", ") : "");
+  const [y, setY] = useState<string>('y' in spec && typeof spec.y === 'string' ? spec.y : "");
+  const [yFields, setYFields] = useState<string>('y' in spec && Array.isArray(spec.y) ? spec.y.join(", ") : "");
 
   const buildSpec = (): ChartSpec => {
     const type = spec.type; // Keep the original type
     if (type === "line") return { type, title, x, y } as LineChartSpec;
     if (type === "bar") return { type, title, x, y } as BarChartSpec;
-    return { type, title, x: x || "category", y: y || "value" } as PieChartSpec;
+    if (type === "pie") return { type, title, x: x || "category", y: y || "value" } as PieChartSpec;
+    if (type === "stackedBar") return { type, title, x, y: yFields.split(',').map(f => f.trim()) } as any;
+    if (type === "groupedBar") return { type, title, x, y: yFields.split(',').map(f => f.trim()) } as any;
+    // For other types, preserve the original spec structure
+    return spec;
   };
 
   return (
@@ -103,10 +107,12 @@ function ChartEditModal({ spec, onCancel, onSave }: { spec: ChartSpec; onCancel:
             <label className="block text-sm mb-1">Y</label>
             <input value={y} onChange={(e) => setY(e.target.value)} className="w-full border rounded px-2 py-1 bg-background" />
           </div>
-          <div>
-            <label className="block text-sm mb-1">Steps (comma separated)</label>
-            <input value={steps} onChange={(e) => setSteps(e.target.value)} className="w-full border rounded px-2 py-1 bg-background" />
-          </div>
+          {(spec.type === "stackedBar" || spec.type === "groupedBar") && (
+            <div>
+              <label className="block text-sm mb-1">Y Fields (comma separated)</label>
+              <input value={yFields} onChange={(e) => setYFields(e.target.value)} className="w-full border rounded px-2 py-1 bg-background" />
+            </div>
+          )}
         </div>
         <div className="p-4 border-t flex justify-end gap-2">
           <Button variant="outline" onClick={onCancel}>Cancel</Button>

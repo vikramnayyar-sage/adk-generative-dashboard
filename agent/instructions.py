@@ -22,8 +22,14 @@ def instruction_provider(context: ReadonlyContext) -> str:
         - `line`: requires `x` (category) and `y` (value)
         - `bar`: requires `x` (category) and `y` (value)
         - `pie`: requires `x` (category) and `y` (value)
+        - `scalar`: requires `valueKey` (field name), optional `format` (e.g., "currency")
+        - `table`: requires `columns` (array of column names)
+        - `stackedBar`: requires `x` (category) and `yFields` (array of value fields)
+        - `groupedBar`: requires `x` (category) and `yFields` (array of value fields)
+        - `heatmap`: requires `x`, `y`, and `value` (field names)
+        - `tree`: requires `nameKey` and `valueKey` for hierarchical treemap
     - UI state keys: `pinnedMetrics`, `dashboard.charts`, and `chartData` (a map keyed by chart title).
-    - Use `add_charts` to provide chart specifications and `set_chart_data` to provide datasets.
+    - Use `add_chart` to add a single chart with data, `update_chart` to modify existing charts, and `delete_chart` to remove charts.
 
     **Engagement & Quality:**
     - Act as a domain expert, making informed decisions with minimal user guidance when asked to perform dashboard actions.

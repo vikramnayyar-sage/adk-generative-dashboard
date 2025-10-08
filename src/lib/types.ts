@@ -1,7 +1,13 @@
 export type LineChartSpec = { type: "line"; title: string; x: string; y: string };
 export type BarChartSpec = { type: "bar"; title: string; x: string; y: string };
+export type StackedBarChartSpec = { type: "stackedBar"; title: string; x: string; y: string[] };
+export type GroupedBarChartSpec = { type: "groupedBar"; title: string; x: string; y: string[] };
 export type PieChartSpec = { type: "pie"; title: string; x: string; y: string };
-export type ChartSpec = LineChartSpec | BarChartSpec | PieChartSpec;
+export type ScalarChartSpec = { type: "scalar"; title: string; valueKey: string; format?: string };
+export type TableChartSpec = { type: "table"; title: string; columns: string[] };
+export type HeatmapChartSpec = { type: "heatmap"; title: string; x: string; y: string; value: string };
+export type TreeChartSpec = { type: "tree"; title: string; nameKey: string; valueKey: string };
+export type ChartSpec = LineChartSpec | BarChartSpec | StackedBarChartSpec | GroupedBarChartSpec | PieChartSpec | ScalarChartSpec | TableChartSpec | HeatmapChartSpec | TreeChartSpec;
 
 // Data records supplied by the agent for charts
 export type ChartDataRecord = Record<string, string | number>;

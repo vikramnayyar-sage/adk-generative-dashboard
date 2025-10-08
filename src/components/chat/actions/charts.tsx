@@ -1,5 +1,20 @@
 import { useCopilotAction } from "@copilotkit/react-core";
-import type { AgentState, ChartSpec, LineChartSpec, BarChartSpec, PieChartSpec, Chart, ChartDataRecord, AgentSetState } from "@/lib/types";
+import type {
+  AgentState,
+  ChartSpec,
+  LineChartSpec,
+  BarChartSpec,
+  PieChartSpec,
+  ScalarChartSpec,
+  TableChartSpec,
+  StackedBarChartSpec,
+  GroupedBarChartSpec,
+  HeatmapChartSpec,
+  TreeChartSpec,
+  Chart,
+  ChartDataRecord,
+  AgentSetState
+} from "@/lib/types";
 import { ChartCard } from "@/components/dashboard/charts";
 import { Button } from "@/components/ui/button";
 
@@ -12,20 +27,32 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
   // Add Chart Action
   useCopilotAction({
     name: "add_chart",
-    description: "Add a chart to the dashboard by type. You *must* populate the data, do not create empty charts.",
+    description: "Add a chart to the dashboard by type. You *must* populate the data, do not create empty charts. Supported types: line, bar, pie, scalar, table, stackedBar, groupedBar, heatmap, tree.",
     parameters: [
       { name: "type", type: "string", required: true },
       { name: "title", type: "string", required: true },
       { name: "x", type: "string", required: false },
       { name: "y", type: "string", required: false },
+      { name: "yFields", type: "string[]", required: false },
+      { name: "valueKey", type: "string", required: false },
+      { name: "nameKey", type: "string", required: false },
+      { name: "value", type: "string", required: false },
+      { name: "columns", type: "string[]", required: false },
+      { name: "format", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
     ],
     renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { type, title, x, y, data } = args as {
+      const { type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data } = args as {
         type: string;
         title: string;
         x?: string;
         y?: string;
+        yFields?: string[];
+        valueKey?: string;
+        nameKey?: string;
+        value?: string;
+        columns?: string[];
+        format?: string;
         data?: ChartDataRecord[];
       };
 
@@ -36,6 +63,18 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
         spec = { type: "bar", title, x: x ?? "x", y: y ?? "y" } as BarChartSpec;
       } else if (type === "pie") {
         spec = { type: "pie", title, x: x ?? "category", y: y ?? "value" } as PieChartSpec;
+      } else if (type === "scalar") {
+        spec = { type: "scalar", title, valueKey: valueKey ?? "value", format } as ScalarChartSpec;
+      } else if (type === "table") {
+        spec = { type: "table", title, columns: columns ?? [] } as TableChartSpec;
+      } else if (type === "stackedBar") {
+        spec = { type: "stackedBar", title, x: x ?? "x", y: yFields ?? [] } as StackedBarChartSpec;
+      } else if (type === "groupedBar") {
+        spec = { type: "groupedBar", title, x: x ?? "x", y: yFields ?? [] } as GroupedBarChartSpec;
+      } else if (type === "heatmap") {
+        spec = { type: "heatmap", title, x: x ?? "x", y: y ?? "y", value: value ?? "value" } as HeatmapChartSpec;
+      } else if (type === "tree") {
+        spec = { type: "tree", title, nameKey: nameKey ?? "name", valueKey: valueKey ?? "value" } as TreeChartSpec;
       }
 
       if (!spec) {
@@ -72,27 +111,39 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
   // Update Chart Action
   useCopilotAction({
     name: "update_chart",
-    description: "Update an existing chart on the dashboard. Provide the current title to identify which chart to update.",
+    description: "Update an existing chart on the dashboard. Provide the current title to identify which chart to update. Supported types: line, bar, pie, scalar, table, stackedBar, groupedBar, heatmap, tree.",
     parameters: [
       { name: "currentTitle", type: "string", required: true },
       { name: "type", type: "string", required: false },
       { name: "title", type: "string", required: false },
       { name: "x", type: "string", required: false },
       { name: "y", type: "string", required: false },
+      { name: "yFields", type: "string[]", required: false },
+      { name: "valueKey", type: "string", required: false },
+      { name: "nameKey", type: "string", required: false },
+      { name: "value", type: "string", required: false },
+      { name: "columns", type: "string[]", required: false },
+      { name: "format", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
     ],
     renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { currentTitle, type, title, x, y, data } = args as {
+      const { currentTitle, type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data } = args as {
         currentTitle: string;
         type?: string;
         title?: string;
         x?: string;
         y?: string;
+        yFields?: string[];
+        valueKey?: string;
+        nameKey?: string;
+        value?: string;
+        columns?: string[];
+        format?: string;
         data?: ChartDataRecord[];
       };
 
       const currentCharts = state?.charts || [];
-      const chartIndex = currentCharts.findIndex(chart => 
+      const chartIndex = currentCharts.findIndex(chart =>
         ('title' in chart ? chart.title : 'Untitled') === currentTitle
       );
 
@@ -107,26 +158,68 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
 
       let spec: ChartSpec | null = null;
       if (newType === "line") {
-        spec = { 
-          type: "line", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "x"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "y") 
+        spec = {
+          type: "line",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "x"),
+          y: y ?? ('y' in existingChart && typeof existingChart.y === 'string' ? existingChart.y : "y")
         } as LineChartSpec;
       } else if (newType === "bar") {
-        spec = { 
-          type: "bar", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "x"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "y") 
+        spec = {
+          type: "bar",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "x"),
+          y: y ?? ('y' in existingChart && typeof existingChart.y === 'string' ? existingChart.y : "y")
         } as BarChartSpec;
-      } else {
-        spec = { 
-          type: "pie", 
-          title: newTitle, 
-          x: x ?? ('x' in existingChart ? existingChart.x : "category"), 
-          y: y ?? ('y' in existingChart ? existingChart.y : "value") 
+      } else if (newType === "pie") {
+        spec = {
+          type: "pie",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "category"),
+          y: y ?? ('y' in existingChart && typeof existingChart.y === 'string' ? existingChart.y : "value")
         } as PieChartSpec;
+      } else if (newType === "scalar") {
+        spec = {
+          type: "scalar",
+          title: newTitle,
+          valueKey: valueKey ?? ('valueKey' in existingChart ? existingChart.valueKey : "value"),
+          format: format ?? ('format' in existingChart ? existingChart.format : undefined)
+        } as ScalarChartSpec;
+      } else if (newType === "table") {
+        spec = {
+          type: "table",
+          title: newTitle,
+          columns: columns ?? ('columns' in existingChart ? existingChart.columns : [])
+        } as TableChartSpec;
+      } else if (newType === "stackedBar") {
+        spec = {
+          type: "stackedBar",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "x"),
+          y: yFields ?? ('y' in existingChart && Array.isArray(existingChart.y) ? existingChart.y : [])
+        } as StackedBarChartSpec;
+      } else if (newType === "groupedBar") {
+        spec = {
+          type: "groupedBar",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "x"),
+          y: yFields ?? ('y' in existingChart && Array.isArray(existingChart.y) ? existingChart.y : [])
+        } as GroupedBarChartSpec;
+      } else if (newType === "heatmap") {
+        spec = {
+          type: "heatmap",
+          title: newTitle,
+          x: x ?? ('x' in existingChart ? existingChart.x : "x"),
+          y: y ?? ('y' in existingChart && typeof existingChart.y === 'string' ? existingChart.y : "y"),
+          value: value ?? ('value' in existingChart ? existingChart.value : "value")
+        } as HeatmapChartSpec;
+      } else if (newType === "tree") {
+        spec = {
+          type: "tree",
+          title: newTitle,
+          nameKey: nameKey ?? ('nameKey' in existingChart ? existingChart.nameKey : "name"),
+          valueKey: valueKey ?? ('valueKey' in existingChart ? existingChart.valueKey : "value")
+        } as TreeChartSpec;
       }
 
       if (!spec) {
