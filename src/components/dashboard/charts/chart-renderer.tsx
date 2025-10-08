@@ -43,13 +43,33 @@ import type {
   ChartDataRecord
 } from "@/lib/types";
 
-function safeVar(name: string) {
-  return String(name).toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
-}
-
-interface ChartRendererProps {
-  spec: ChartSpec;
-  data: ChartDataRecord[];
+function HeatMapChart({ spec }: { spec: HeatMapChartSpec }) {
+  // TODO: Implement heatmap rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <table className="w-full text-xs">
+        <thead>
+          <tr>
+            <th></th>
+            {spec.xLabels?.map((x: string) => <th key={x}>{x}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {spec.matrix?.map((row: number[], i: number) => (
+            <tr key={i}>
+              <td className="font-bold">{spec.yLabels?.[i]}</td>
+              {row.map((val: number, j: number) => (
+                <td key={j} style={{ background: `rgba(25, 118, 210, ${Math.min(1, val / 10)})`, color: val > 5 ? 'white' : 'black' }}>
+                  {val}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export function ChartRenderer({ spec, data }: ChartRendererProps) {
@@ -65,11 +85,33 @@ export function ChartRenderer({ spec, data }: ChartRendererProps) {
   return <div className="text-muted-foreground text-sm">Unsupported chart type</div>;
 }
 
-const chartColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+function TreeMapChart({ spec }: { spec: TreeMapChartSpec }) {
+  // TODO: Implement treemap rendering
+  return (
+    <div className="bg-white border rounded p-4">
+      <div className="font-bold mb-2">{spec.title}</div>
+      <div className="text-xs">Treemap rendering coming soon.</div>
+    </div>
+  );
+  }
+
+// Accessible, high-contrast color palette for charts
+const chartColors = [
+  "#1976d2", // blue
+  "#d32f2f", // red
+  "#388e3c", // green
+  "#fbc02d", // yellow
+  "#7b1fa2", // purple
+  "#f57c00", // orange
+  "#0288d1", // cyan
+  "#c2185b", // magenta
+  "#455a64", // dark gray
+  "#8bc34a"  // light green
+];
 
 function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-1)" },
+    [spec.y]: { label: spec.y, color: chartColors[0] },
   }), [spec.y]);
 
   return (
@@ -81,7 +123,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
           <YAxis tickLine={false} axisLine={false} tickMargin={8} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Line type="monotone" dataKey={spec.y} stroke={`var(--color-${safeVar(spec.y)})`} strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey={spec.y} stroke={chartColors[0]} strokeWidth={2} dot={false} />
         </RLineChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -90,7 +132,7 @@ function LineChart({ spec, data }: { spec: LineChartSpec; data: ChartDataRecord[
 
 function BarChart({ spec, data }: { spec: BarChartSpec; data: ChartDataRecord[] }) {
   const config: ChartConfig = useMemo(() => ({
-    [spec.y]: { label: spec.y, color: "var(--chart-2)" },
+    [spec.y]: { label: spec.y, color: chartColors[1] },
   }), [spec.y]);
 
   return (

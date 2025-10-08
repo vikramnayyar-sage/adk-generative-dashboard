@@ -1,4 +1,3 @@
-
 export type LineChartSpec = { type: "line"; title: string; x: string; y: string };
 export type BarChartSpec = { type: "bar"; title: string; x: string; y: string };
 export type StackedBarChartSpec = { type: "stackedBar"; title: string; x: string; y: string[] };
@@ -99,5 +98,10 @@ export const initialState: AgentState = {
       hint: "Total sales for the last 30 days",
       icon: "conversion"
     }
-  ]
+  ],
+  cashflowEntries: [],
+  startingBalance: 0,
+  creditors: [],
+  debitors: [],
+  customers: []
 };

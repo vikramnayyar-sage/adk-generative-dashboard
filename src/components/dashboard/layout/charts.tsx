@@ -32,7 +32,8 @@ export const Charts = ({ state, setState }: ChartsProps) => {
       return { 
         title: prev?.title ?? "Dashboard",
         charts,
-        pinnedMetrics: prev?.pinnedMetrics ?? []
+        pinnedMetrics: prev?.pinnedMetrics ?? [],
+        cashflowEntries: prev?.cashflowEntries ?? []
       } as AgentState;
     });
   };
@@ -48,7 +49,8 @@ export const Charts = ({ state, setState }: ChartsProps) => {
     setState((prev) => ({ 
       title: prev?.title ?? "Dashboard",
       charts: [...(prev?.charts ?? []), newChart],
-      pinnedMetrics: prev?.pinnedMetrics ?? []
+      pinnedMetrics: prev?.pinnedMetrics ?? [],
+      cashflowEntries: prev?.cashflowEntries ?? []
     }));
   };
 

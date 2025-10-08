@@ -41,10 +41,11 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
     ],
     handler: ({ type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data }) => {
       let spec: ChartSpec | null = null;
+      let chartData: ChartDataRecord[] = Array.isArray(data) ? data : [];
       if (type === "line") {
-        spec = { type: "line", title, x: x ?? "x", y: y ?? "y" } as LineChartSpec;
+        spec = { type: "line", title, x: x ?? "x", y: y ?? "y" };
       } else if (type === "bar") {
-        spec = { type: "bar", title, x: x ?? "x", y: y ?? "y" } as BarChartSpec;
+        spec = { type: "bar", title, x: x ?? "x", y: y ?? "y" };
       } else if (type === "pie") {
         spec = { type: "pie", title, x: x ?? "category", y: y ?? "value" } as PieChartSpec;
       } else if (type === "scalar") {
@@ -60,7 +61,6 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       } else if (type === "tree") {
         spec = { type: "tree", title, nameKey: nameKey ?? "name", valueKey: valueKey ?? "value" } as TreeChartSpec;
       }
-
       if (!spec) {
         return "Unsupported chart type";
       }
@@ -94,6 +94,13 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       { name: "columns", type: "string[]", required: false },
       { name: "format", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
+      { name: "columns", type: "string[]", required: false },
+      { name: "value", type: "number", required: false },
+      { name: "matrix", type: "object[]", required: false },
+      { name: "xLabels", type: "string[]", required: false },
+      { name: "yLabels", type: "string[]", required: false },
+      { name: "groups", type: "string[]", required: false },
+      { name: "nodes", type: "object[]", required: false }
     ],
     handler: ({ currentTitle, type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data }) => {
       const currentCharts = state?.charts || [];
@@ -110,6 +117,7 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       const newTitle = title || ('title' in existingChart ? existingChart.title : 'Untitled');
 
       let spec: ChartSpec | null = null;
+      let chartData: ChartDataRecord[] = [];
       if (newType === "line") {
         spec = {
           type: "line",
@@ -174,7 +182,6 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
           valueKey: valueKey ?? ('valueKey' in existingChart ? existingChart.valueKey : "value")
         } as TreeChartSpec;
       }
-
       if (!spec) {
         return "Unsupported chart type";
       }

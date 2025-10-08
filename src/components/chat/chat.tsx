@@ -9,9 +9,9 @@ interface ChatProps {
   className: string;
 }
 
-export function Chat({className}: ChatProps) {  
+export function Chat({ className }: ChatProps) {
   return (
-    <div className={cn(className, "p-4 max-w-[500px]")}> 
+    <div className={cn(className, "p-4 max-w-[500px]")}>
       <div className="h-full min-h-0 rounded-2xl border bg-card shadow-xl overflow-hidden flex flex-col">
         <Header />
         <CopilotChat
@@ -20,15 +20,26 @@ export function Chat({className}: ChatProps) {
           initial: "👋 Hi!\n\nI'm here to help you analyze your cashflow and build insightful visualizations.\n\nTry some of the suggestions below, or ask me anything about your cashflow data!"
           }}
           suggestions={[
-            // Old suggestions - commented out
-            // { title: "Pizza sales", message: "Please rebuild the dashboard to help me keep track of the current trends in the Pizza industry." },
-            // { title: "AI growth", message: "Please rebuild the dashboard to help me keep track of the current trends in the AI industry." },
-            // { title: "Music trends", message: "Please rebuild the dashboard to help me keep track of the current trends in the Music industry." },
-
-            // New cashflow-focused suggestions
-            { title: "Inflows vs Outflows", message: "Create a bar chart showing total inflows vs total outflows" },
-            { title: "Balance Trend", message: "Show me a line chart of the balance over time" },
-            { title: "Top Expenses", message: "Create a chart showing my top 5 outgoing payments" },
+            {
+              title: "Review pending invoices",
+              message: "Show me all pending invoices and suggest which ones should be paid next based on cashflow."
+            },
+            {
+              title: "Authorise payments",
+              message: "Help me select invoices for payment and show how these payments will impact our cashflow."
+            },
+            {
+              title: "Vendor payment summary",
+              message: "Summarise recent payments made to vendors and highlight any overdue invoices."
+            },
+            {
+              title: "Projected cashflow",
+              message: "Show a projection of our cashflow after making the next round of payments."
+            },
+            {
+              title: "Automate vendor notifications",
+              message: "Draft emails to vendors informing them that their payments have been initiated."
+            }
           ]}
           Input={SidebarInput}
           AssistantMessage={AssistantBubble}
