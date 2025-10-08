@@ -15,8 +15,6 @@ import type {
   ChartDataRecord,
   AgentSetState
 } from "@/lib/types";
-import { ChartCard } from "@/components/dashboard/charts";
-import { Button } from "@/components/ui/button";
 
 interface UseChartActionsProps {
   state: AgentState;
@@ -39,23 +37,9 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       { name: "value", type: "string", required: false },
       { name: "columns", type: "string[]", required: false },
       { name: "format", type: "string", required: false },
-      { name: "data", type: "object[]", required: false },
+      { name: "data", type: "object[]", required: true },
     ],
-    renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data } = args as {
-        type: string;
-        title: string;
-        x?: string;
-        y?: string;
-        yFields?: string[];
-        valueKey?: string;
-        nameKey?: string;
-        value?: string;
-        columns?: string[];
-        format?: string;
-        data?: ChartDataRecord[];
-      };
-
+    handler: ({ type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data }) => {
       let spec: ChartSpec | null = null;
       if (type === "line") {
         spec = { type: "line", title, x: x ?? "x", y: y ?? "y" } as LineChartSpec;
@@ -78,33 +62,18 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       }
 
       if (!spec) {
-        respond?.("Unsupported chart type");
-        return <></>;
+        return "Unsupported chart type";
       }
 
       const dataRecords: ChartDataRecord[] = Array.isArray(data) ? (data as ChartDataRecord[]) : [];
       const chart: Chart = { ...spec, data: dataRecords };
 
-      const onHumanResponse = (shouldProceed: boolean) => {
-        if (!shouldProceed) {
-          respond?.("User declined adding the chart. This is not an issuue, they just don't want to add it.");
-          return;
-        }
-        setState({
-          ...state,
-          charts: [...state?.charts || [], chart],
-        });
-        respond?.({ "status": "success", "message": "Added chart successfully!" });
-      }
+      setState({
+        ...state,
+        charts: [...state?.charts || [], chart],
+      });
 
-      return (
-        <ChartCard
-          spec={spec}
-          onHumanInput={onHumanResponse}
-          status={status}
-          chartData={{[title]: dataRecords }}
-        />
-      );
+      return { "status": "success", "message": `Added chart "${title}" successfully!` };
     },
   }, [state]);
 
@@ -126,30 +95,14 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       { name: "format", type: "string", required: false },
       { name: "data", type: "object[]", required: false },
     ],
-    renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { currentTitle, type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data } = args as {
-        currentTitle: string;
-        type?: string;
-        title?: string;
-        x?: string;
-        y?: string;
-        yFields?: string[];
-        valueKey?: string;
-        nameKey?: string;
-        value?: string;
-        columns?: string[];
-        format?: string;
-        data?: ChartDataRecord[];
-      };
-
+    handler: ({ currentTitle, type, title, x, y, yFields, valueKey, nameKey, value, columns, format, data }) => {
       const currentCharts = state?.charts || [];
       const chartIndex = currentCharts.findIndex(chart =>
         ('title' in chart ? chart.title : 'Untitled') === currentTitle
       );
 
       if (chartIndex === -1) {
-        respond?.(`Chart with title "${currentTitle}" not found. Available charts: ${currentCharts.map(c => 'title' in c ? c.title : 'Untitled').join(', ')}`);
-        return <></>;
+        return `Chart with title "${currentTitle}" not found. Available charts: ${currentCharts.map(c => 'title' in c ? c.title : 'Untitled').join(', ')}`;
       }
 
       const existingChart = currentCharts[chartIndex];
@@ -223,43 +176,20 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
       }
 
       if (!spec) {
-        respond?.("Unsupported chart type");
-        return <></>;
+        return "Unsupported chart type";
       }
 
       const newData = Array.isArray(data) ? data : existingChart.data;
       const updatedChart: Chart = { ...spec, data: newData };
 
-      const onHumanResponse = (shouldProceed: boolean) => {
-        if (!shouldProceed) {
-          respond?.({ "status": "success", "message": "User declined updating the chart." });
-          return;
-        }
-        const updatedCharts = [...currentCharts];
-        updatedCharts[chartIndex] = updatedChart;
-        setState({
-          ...state,
-          charts: updatedCharts,
-        });
-        respond?.({ "status": "success", "message": "Updated chart successfully!" });
-      }
+      const updatedCharts = [...currentCharts];
+      updatedCharts[chartIndex] = updatedChart;
+      setState({
+        ...state,
+        charts: updatedCharts,
+      });
 
-      return (
-        <>
-          <div className="mb-4">
-            <p className="text-sm text-muted-foreground mb-2">
-              Updating chart: <strong>{currentTitle}</strong>
-            </p>
-          </div>
-          <ChartCard
-            spec={spec}
-            onHumanInput={onHumanResponse}
-            status={status}
-            chartData={{[newTitle]: newData }}
-            actionButtonText="Update"
-          />
-        </>
-      );
+      return { "status": "success", "message": `Updated chart "${newTitle}" successfully!` };
     },
   }, [state]);
 
@@ -270,60 +200,23 @@ export const useChartActions = ({ state, setState }: UseChartActionsProps) => {
     parameters: [
       { name: "title", type: "string", required: true },
     ],
-    renderAndWaitForResponse: ({ args, respond, status }) => {
-      const { title } = args as { title: string };
-
+    handler: ({ title }) => {
       const currentCharts = state?.charts || [];
-      const chartIndex = currentCharts.findIndex(chart => 
+      const chartIndex = currentCharts.findIndex(chart =>
         ('title' in chart ? chart.title : 'Untitled') === title
       );
 
       if (chartIndex === -1) {
-        respond?.(`Chart with title "${title}" not found. Available charts: ${currentCharts.map(c => 'title' in c ? c.title : 'Untitled').join(', ')}`);
-        return <></>;
+        return `Chart with title "${title}" not found. Available charts: ${currentCharts.map(c => 'title' in c ? c.title : 'Untitled').join(', ')}`;
       }
 
-      const chartToDelete = currentCharts[chartIndex];
+      const updatedCharts = currentCharts.filter((_, index) => index !== chartIndex);
+      setState({
+        ...state,
+        charts: updatedCharts,
+      });
 
-      if (!chartToDelete) {
-        return <></>;
-      }
-
-      const onHumanResponse = (shouldProceed: boolean) => {
-        if (!shouldProceed) {
-          respond?.({ "status": "success", "message": "User declined deleting the chart." });
-          return;
-        }
-        const updatedCharts = currentCharts.filter((_, index) => index !== chartIndex);
-        setState({
-          ...state,
-          charts: updatedCharts,
-        });
-        respond?.({ "status": "success", "message": "Deleted chart successfully!" });
-      }
-
-      return (
-        <div className="space-y-4">
-          <div className="p-4 border border-destructive/20 bg-destructive/5 rounded-lg">
-            <h3 className="font-medium text-destructive mb-2">Delete Chart</h3>
-            <p className="text-sm text-muted-foreground mb-3">
-              Are you sure you want to delete the chart: <strong>{title}</strong>?
-            </p>
-            <div className="border border-border rounded-lg p-3 bg-background">
-              <ChartCard
-                spec={chartToDelete}
-                chartData={{[title]: chartToDelete.data }}
-              />
-            </div>
-          </div>
-          {status !== "complete" && (
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => onHumanResponse(false)}>Cancel</Button>
-              <Button variant="destructive" onClick={() => onHumanResponse(true)}>Delete</Button>
-            </div>
-          )}
-        </div>
-      );
+      return { "status": "success", "message": `Deleted chart "${title}" successfully!` };
     },
   }, [state]);
 };

@@ -31,8 +31,11 @@ def update_pinned_metrics(tool_context: ToolContext, updated_pinned_metrics: Lis
     except Exception as e:
         return {"status": "error", "message": f"Error updating pinned metrics: {str(e)}"}
 
+
+# Chart tools removed - these are now handled by frontend useCopilotAction hooks
+# The frontend actions will be automatically exposed to the agent via CopilotKit
+
 tools = [
-    # UI owns charts. Agent can provide pinned metrics and do searches.
     FunctionTool(func=add_pinned_metrics),
     FunctionTool(func=update_pinned_metrics),
 ]

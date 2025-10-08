@@ -1,3 +1,4 @@
+
 export type LineChartSpec = { type: "line"; title: string; x: string; y: string };
 export type BarChartSpec = { type: "bar"; title: string; x: string; y: string };
 export type StackedBarChartSpec = { type: "stackedBar"; title: string; x: string; y: string[] };
@@ -7,9 +8,9 @@ export type ScalarChartSpec = { type: "scalar"; title: string; valueKey: string;
 export type TableChartSpec = { type: "table"; title: string; columns: string[] };
 export type HeatmapChartSpec = { type: "heatmap"; title: string; x: string; y: string; value: string };
 export type TreeChartSpec = { type: "tree"; title: string; nameKey: string; valueKey: string };
+
 export type ChartSpec = LineChartSpec | BarChartSpec | StackedBarChartSpec | GroupedBarChartSpec | PieChartSpec | ScalarChartSpec | TableChartSpec | HeatmapChartSpec | TreeChartSpec;
 
-// Data records supplied by the agent for charts
 export type ChartDataRecord = Record<string, string | number>;
 export type ChartDataMap = Record<string, ChartDataRecord[]>; // keyed by chart title
 
@@ -23,7 +24,18 @@ export type Metric = {
 
 export type Chart = ChartSpec & {
   data: ChartDataRecord[];
-}
+};
+
+export type ChartType =
+  | "line"
+  | "bar"
+  | "stackedBar"
+  | "groupedBar"
+  | "pie"
+  | "scalar"
+  | "table"
+  | "heatmap"
+  | "tree";
 
 
 export type CashflowEntry = {
