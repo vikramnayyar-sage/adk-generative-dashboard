@@ -38,16 +38,18 @@ export const CashflowIntelligenceChart: React.FC<CashflowIntelligenceChartProps>
     cy: number;
     value: number;
     index: number;
+    key?: string | number;
   }
-  
+
   const CustomDot = (props: CustomDotProps) => {
-    const { cx, cy, value, index } = props;
+    const { cx, cy, value, index, key } = props;
     const entry = chartData[index];
     const isDip = value < 0;
     const isHovered = hoveredIndex === index;
     
     return (
       <circle
+        key={key ?? `dot-${index}`}
         cx={cx}
         cy={cy}
         r={isDip ? 10 : 6}
