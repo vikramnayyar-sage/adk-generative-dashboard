@@ -27,7 +27,7 @@ export function Chat({className}: ChatProps) {
 
             // New cashflow-focused suggestions
             { title: "Inflows vs Outflows", message: "Create a bar chart showing total inflows vs total outflows" },
-            { title: "Balance Trend", message: "Show me a line chart of the balance over time" },
+            { title: "Biggest Outflows Party", message: "Which party do I spend the most on?" },
             { title: "Top Expenses", message: "Create a chart showing my top 5 outgoing payments" },
           ]}
           Input={SidebarInput}
