@@ -27,28 +27,29 @@ Improve UX:
 Actually use Sample data from Hackathon Repo. ✅
 Why are some charts 'coming soon'?? ✅
 
-Fix thinking mode.
+Fix thinking mode. ✅
 
+Use the new mock data
 Move initial graph into state.
-
 Add positive peak analysis
-
 Add second line after agent analysis.
+
 
 Graph filters by timeframe (Drag??)
 
 Filter in strategy mock techniques.
 
-Change balance trend.
-
 Click on individual payment bars (Positive)
 Click on individual payment bars (Negative)
 
+After clicking a dot, add prompt suggestion buttons for next behaviour
+
 SMS ✅
-Use the new mock data
+
 Verify charts are actually created*
 Enhance instructions further*
-After clicking a dot, add prompt suggestion buttons for next behaviour
+
+Migrate to D3 JS (Charts)
 
 To run:
     npm run dev:ui
