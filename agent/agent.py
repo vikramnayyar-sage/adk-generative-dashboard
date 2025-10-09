@@ -9,7 +9,8 @@ from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import SseConnectionParams, StdioConnectionParams, StdioServerParameters
 from fastmcp import FastMCP
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Local imports
@@ -22,6 +23,8 @@ from instructions import instruction_provider
 import os
 import json
 from state import Dashboard, CashflowEntry
+
+MCP_SERVER_PATH = os.getenv("MCP_SERVER_PATH",)
 
 def load_mock_data():
   mock_path = os.path.join(os.path.dirname(__file__), '..', 'DATA', 'MOCK.json')
